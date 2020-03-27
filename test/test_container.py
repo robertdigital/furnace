@@ -41,9 +41,9 @@ def debootstrapped_dir(tmpdir_factory):
 
 @pytest.fixture
 def rootfs_for_testing(debootstrapped_dir, tmpdir_factory):
-    overlay_workdir = Path(tmpdir_factory.mktemp('overlay_work'))
-    overlay_rwdir = Path(tmpdir_factory.mktemp('overlay_rw'))
-    overlay_mounted = Path(tmpdir_factory.mktemp('overlay_mount'))
+    overlay_workdir = Path(str(tmpdir_factory.mktemp('overlay_work')))
+    overlay_rwdir = Path(str(tmpdir_factory.mktemp('overlay_rw')))
+    overlay_mounted = Path(str(tmpdir_factory.mktemp('overlay_mount')))
     with OverlayfsMountContext([debootstrapped_dir], overlay_rwdir, overlay_workdir, overlay_mounted):
         yield overlay_mounted
 
@@ -149,9 +149,9 @@ def test_loop_mounts_work(rootfs_for_testing):
 
 
 def test_using_container_does_not_touch_files_if_network_isolated(debootstrapped_dir, tmpdir_factory):
-    overlay_workdir = Path(tmpdir_factory.mktemp('overlay_work'))
-    overlay_rwdir = Path(tmpdir_factory.mktemp('overlay_rw'))
-    overlay_mounted = Path(tmpdir_factory.mktemp('overlay_mount'))
+    overlay_workdir = Path(str(tmpdir_factory.mktemp('overlay_work')))
+    overlay_rwdir = Path(str(tmpdir_factory.mktemp('overlay_rw')))
+    overlay_mounted = Path(str(tmpdir_factory.mktemp('overlay_mount')))
     with OverlayfsMountContext([debootstrapped_dir], overlay_rwdir, overlay_workdir, overlay_mounted):
         with ContainerContext(overlay_mounted, isolate_networking=True) as cnt:
             cnt.run(["/bin/ls", "/"], check=True)
